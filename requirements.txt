@@ -1,0 +1,12 @@
+# Required packages
+gymnasium[box2d]
+torch
+torchvision
+numpy
+matplotlib
+imageio  # for saving videos
+tqdm  # for progress bars
+
+# Optional but recommended
+tensorboard  # for advanced logging
+jupyter  # for experimentation
