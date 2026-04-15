@@ -6,6 +6,7 @@ import torch.optim as optim
 from collections import deque
 import random
 import matplotlib.pyplot as plt
+from utils import print_stats, make_env_with_video, plot_baseline, record_episodes
 
 # Hyperparameters (you should experiment with these options!)
 LEARNING_RATE = 5e-4
@@ -31,24 +32,10 @@ print(f"Action dimension: {action_dim}")
 # Training loop
 num_episodes = 1000
 rewards_history = []
+episode_lengths = []
 epsilon = EPSILON_START
 
-for episode in range(num_episodes):
-    state, _ = env.reset()
-    episode_reward = 0
-    done = False
-    
-    while not done:
-        # TODO: select an action
-        pass
-    
-    # TODO: Decay epsilon
-    # TODO: Track and log statistics
-    
-    if episode % 50 == 0:
-        print(f"Episode {episode}, Reward: {episode_reward:.2f}, Epsilon: {epsilon:.3f}")
+def policy(state):
+    return env.action_space.sample()
 
-# Testing
-# TODO: Test your trained agent
-
-env.close()
+record_episodes(5, "gifs", policy)

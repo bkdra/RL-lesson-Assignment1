@@ -1,0 +1,11 @@
+1. checkpoints per 60 episodes
+
+2. experiments(choose 4 axes)
+    epsilon decay
+    target update frequency
+    learning rate
+    replay buffer size
+    network's depth
+    network's width
+
+3. reports
