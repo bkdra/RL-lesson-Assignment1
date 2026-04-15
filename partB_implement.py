@@ -22,6 +22,11 @@ TARGET_UPDATE_FREQ = 20  # Update target network every N episodes
 CHECKPOINT_FREQ = 60  # Save checkpoint every N episodes
 RENDER_MODE = 'human'
 SOLVED_THRESHOLD = 200.0  # Environment considered solved if mean reward >= this
+DEPTH = 2  # Number of hidden layers in the DQN (2, 3, or 4)
+HIDDEN_DIM = 128  # Number of units in hidden layers
+
+MODEL_PATH_RECORD = "models/lunar_lander_dqn_depth2.pth"
+OUTPUT_DIR_RECORD = "gifs_B/depth2"
 
 # ══════════════════════════════════════════════════════════════════════════════
 # DEVICE SETUP
@@ -35,7 +40,7 @@ print(f"Using device: {device}")
 class DQN(nn.Module):
     """Deep Q-Network for LunarLander."""
     
-    def __init__(self, state_dim: int, action_dim: int, hidden_dim: int = 128):
+    def __init__(self, state_dim: int, action_dim: int, hidden_dim: int = 128, depth: int = 3):
         """
         Initialize the DQN.
         
@@ -47,15 +52,37 @@ class DQN(nn.Module):
             Dimension of the action space (4 for LunarLander).
         hidden_dim : int
             Size of hidden layers.
+        depth : int
+            Number of hidden layers.
         """
         super(DQN, self).__init__()
-        self.net = nn.Sequential(
-            nn.Linear(state_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, action_dim)
-        )
+
+        if depth == 2:
+            self.net = nn.Sequential(
+                nn.Linear(state_dim, hidden_dim),
+                nn.ReLU(),
+                nn.Linear(hidden_dim, action_dim)
+            )
+        elif depth == 3:
+            self.net = nn.Sequential(
+                nn.Linear(state_dim, hidden_dim),
+                nn.ReLU(),
+                nn.Linear(hidden_dim, hidden_dim),
+                nn.ReLU(),
+                nn.Linear(hidden_dim, action_dim)
+            )
+        elif depth == 4:
+            self.net = nn.Sequential(
+                nn.Linear(state_dim, hidden_dim),
+                nn.ReLU(),
+                nn.Linear(hidden_dim, hidden_dim),
+                nn.ReLU(),
+                nn.Linear(hidden_dim, hidden_dim),
+                nn.ReLU(),
+                nn.Linear(hidden_dim, action_dim)
+            )
+        else:
+            raise ValueError("Unsupported depth. Choose from {2, 3, 4}.")
     
     def forward(self, state: torch.Tensor) -> torch.Tensor:
         """Forward pass: return Q-values for actions."""
@@ -115,7 +142,7 @@ class ReplayBuffer:
 class DQNAgent:
     """Deep Q-Learning agent for LunarLander."""
     
-    def __init__(self, state_dim: int, action_dim: int, learning_rate: float = 5e-4, hidden_dim: int = 128):
+    def __init__(self, state_dim: int, action_dim: int, learning_rate: float = 5e-4, hidden_dim: int = 128, depth: int = 3):
         """
         Initialize the DQN agent.
         
@@ -129,13 +156,15 @@ class DQNAgent:
             Learning rate for the optimizer.
         hidden_dim : int
             Size of hidden layers.
+        depth : int
+            Number of hidden layers.
         """
         self.state_dim = state_dim
         self.action_dim = action_dim
         
         # Q-networks
-        self.q_network = DQN(state_dim, action_dim, hidden_dim).to(device)
-        self.target_network = DQN(state_dim, action_dim, hidden_dim).to(device)
+        self.q_network = DQN(state_dim, action_dim, hidden_dim, depth).to(device)
+        self.target_network = DQN(state_dim, action_dim, hidden_dim, depth).to(device)
         self.target_network.load_state_dict(self.q_network.state_dict())
         self.target_network.eval()
         
@@ -226,7 +255,7 @@ class DQNAgent:
 # ══════════════════════════════════════════════════════════════════════════════
 # TRAINING
 # ══════════════════════════════════════════════════════════════════════════════
-def train_dqn(num_episodes: int = 1000, render: bool = False, hidden_dim: int = 128, checkpoint_folder: str = "checkpoints"):
+def train_dqn(num_episodes: int = 1000, render: bool = False, hidden_dim: int = 128, depth: int = 3, checkpoint_folder: str = "checkpoints"):
     """
     Train the DQN agent on LunarLander.
     
@@ -252,7 +281,7 @@ def train_dqn(num_episodes: int = 1000, render: bool = False, hidden_dim: int = 
     print(f"Action dimension: {action_dim}")
     
     # Initialize agent
-    agent = DQNAgent(state_dim, action_dim, learning_rate=LEARNING_RATE, hidden_dim=hidden_dim)
+    agent = DQNAgent(state_dim, action_dim, learning_rate=LEARNING_RATE, hidden_dim=hidden_dim, depth=depth)
     
     # Training metrics
     rewards_history = []
@@ -418,7 +447,7 @@ def test_agent(model_path: str = "lunar_lander_dqn.pth", num_episodes: int = 10,
     
     return episode_rewards
 
-def record_test_agent(model_path: str = "lunar_lander_dqn.pth", num_episodes: int = 10, render: bool = True, hidden_dim: int = 128):
+def record_test_agent(model_path: str = "lunar_lander_dqn.pth", output_dir: str = "gifs_B", num_episodes: int = 10, render: bool = True, hidden_dim: int = 128, depth: int = 3):
     """
     Load a trained agent and evaluate it on the environment.
     
@@ -430,7 +459,11 @@ def record_test_agent(model_path: str = "lunar_lander_dqn.pth", num_episodes: in
         Number of episodes to evaluate.
     render : bool
         Whether to render the environment.
-    
+    hidden_dim : int
+        Number of units in hidden layers.
+    depth : int
+        Number of hidden layers.
+
     Returns
     -------
     list
@@ -443,7 +476,7 @@ def record_test_agent(model_path: str = "lunar_lander_dqn.pth", num_episodes: in
     action_dim = env.action_space.n
     
     # Initialize agent
-    agent = DQNAgent(state_dim, action_dim, hidden_dim=hidden_dim)
+    agent = DQNAgent(state_dim, action_dim, hidden_dim=hidden_dim, depth=depth)
     
     # Load trained weights
     agent.load(model_path)
@@ -458,8 +491,11 @@ def record_test_agent(model_path: str = "lunar_lander_dqn.pth", num_episodes: in
         action = agent.select_action(state, epsilon=0.0)  # Greedy action selection
         return action
     
+    if not os.path.isdir(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
+
     # Evaluate
-    record_episodes(num_episodes, "gifs_B", policy)
+    record_episodes(num_episodes, output_dir, policy)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -476,15 +512,15 @@ if __name__ == "__main__":
     elif len(sys.argv) > 1 and sys.argv[1] == "record_gifs":
         # Record episodes using a random policy
         print("Recording episodes with a random policy...\n")
-        record_test_agent(model_path="lunar_lander_dqn_depth4.pth", num_episodes=10, render=True, hidden_dim=128)
+        record_test_agent(model_path=MODEL_PATH_RECORD, output_dir=OUTPUT_DIR_RECORD, num_episodes=5, render=True, hidden_dim=HIDDEN_DIM, depth=DEPTH)
     else:
         # Train the agent
         print("Starting DQN training on LunarLander-v3\n")
-        rewards, losses, epsilons, avg_q_values, solved_at, agent = train_dqn(num_episodes=600, render=False, hidden_dim=128, checkpoint_folder="freq20")
+        rewards, losses, epsilons, avg_q_values, solved_at, agent = train_dqn(num_episodes=600, render=False, hidden_dim=HIDDEN_DIM, checkpoint_folder=f"depth{DEPTH}", depth = DEPTH)
         
         # Save the trained model
-        agent.save("lunar_lander_dqn_freq20.pth")
-        print("\nModel saved to 'lunar_lander_dqn_freq20.pth'")
+        agent.save(f"lunar_lander_dqn_depth{DEPTH}.pth")
+        print(f"\nModel saved to 'lunar_lander_dqn_depth{DEPTH}.pth'")
 
         metrics = {
             'episode_rewards': rewards,
@@ -493,4 +529,4 @@ if __name__ == "__main__":
             'mean_q_values': avg_q_values,
             'solved_at': solved_at,
         }
-        plot_training_curves(metrics, out_dir="outputs/part_b_c_2", fileName_suffix="_freq20")
+        plot_training_curves(metrics, out_dir="outputs/part_b_c_2", fileName_suffix=f"_depth{DEPTH}")
