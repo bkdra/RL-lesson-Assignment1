@@ -24,8 +24,11 @@ RENDER_MODE = 'human'
 SOLVED_THRESHOLD = 200.0  # Environment considered solved if mean reward >= this
 DEPTH = 2  # Number of hidden layers in the DQN (2, 3, or 4)
 HIDDEN_DIM = 128  # Number of units in hidden layers
+TRAIN_EPISODES_NUM = 600
 
-MODEL_PATH_RECORD = "models/lunar_lander_dqn_depth2.pth"
+TEST_EPISODES_NUM = 5
+
+MODEL_PATH = "models/lunar_lander_dqn_depth2.pth"
 OUTPUT_DIR_RECORD = "gifs_B/depth2"
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -508,15 +511,15 @@ if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "test":
         # Load and test the trained model
         print("Loading and testing trained agent...\n")
-        test_agent(model_path="lunar_lander_dqn.pth", num_episodes=10, render=True)
+        test_agent(model_path=MODEL_PATH, num_episodes=TEST_EPISODES_NUM, render=True)
     elif len(sys.argv) > 1 and sys.argv[1] == "record_gifs":
         # Record episodes using a random policy
         print("Recording episodes with a random policy...\n")
-        record_test_agent(model_path=MODEL_PATH_RECORD, output_dir=OUTPUT_DIR_RECORD, num_episodes=5, render=True, hidden_dim=HIDDEN_DIM, depth=DEPTH)
+        record_test_agent(model_path=MODEL_PATH, output_dir=OUTPUT_DIR_RECORD, num_episodes=TEST_EPISODES_NUM, render=True, hidden_dim=HIDDEN_DIM, depth=DEPTH)
     else:
         # Train the agent
         print("Starting DQN training on LunarLander-v3\n")
-        rewards, losses, epsilons, avg_q_values, solved_at, agent = train_dqn(num_episodes=600, render=False, hidden_dim=HIDDEN_DIM, checkpoint_folder=f"depth{DEPTH}", depth = DEPTH)
+        rewards, losses, epsilons, avg_q_values, solved_at, agent = train_dqn(num_episodes=TRAIN_EPISODES_NUM, render=False, hidden_dim=HIDDEN_DIM, checkpoint_folder=f"depth{DEPTH}", depth = DEPTH)
         
         # Save the trained model
         agent.save(f"lunar_lander_dqn_depth{DEPTH}.pth")
