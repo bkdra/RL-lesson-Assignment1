@@ -10,16 +10,16 @@ Other experiment results and source code can be found on my GitHub: https://gith
 
 # What I submitted
 ## Source code:
-* partA.py: program for Part A (random agent)
-* partA_recordGIF.py: uses the random agent to record gameplay scenes as GIF files
-* agent_implement.py: includes the agent implementation (Part B), training and plotting of training results (Part C), andhyperparameter modifications (Part D). It can also evaluate the trained model and record gameplay scenes controlled by the trainedmodel as GIF files.
-    > execution method:
+    * partA.py: program for Part A (random agent)
+    * partA_recordGIF.py: uses the random agent to record gameplay scenes as GIF files
+    * agent_implement.py: includes the agent implementation (Part B), training and plotting of training results (Part C), and hyperparameter modifications (Part D). It can also evaluate the trained model and record gameplay scenes controlled by the trained model as GIF files.
+        > execution method:
         python agent_implement.py -> training the model
         python agent_implement.py test -> evaluate the model (you can choose what model you want to evaluate by modifing hyperparameter)
         python agent_implement.py record_gifs -> evaluate the model and record the gameplay scenes as GIF files
         
-* compare_plot.py: loads CSV files that record moving-average experiment data
-* utils.py: utility methods for producing result images and GIFs
+    * compare_plot.py: loads CSV files that record moving-average experiment data
+    * utils.py: utility methods for producing result images and GIFs
 
 
 ## GIFs (.gif):
@@ -70,21 +70,21 @@ GIF files for Part B (using different hyperparameters)
 ## models
 trained model weights for different hyperparameters. The naming convention is the same as the checkpoint folder names:"lunar_lander_dqn_<modified parameter and its value>.pth"
 ## outputs
-generated figures and logs for analysis
-* part_a
-    * baseline_stats.png: summary plot for Part A (random agent baseline)
-* part_b_c_1
-    * training_curves_<experiment>.png: per-experiment training curves
-            (reward, loss, epsilon, and mean max Q-value)
-    * training_metrics_<experiment>.csv: per-episode moving-average logs used
-            to generate the training curves. Columns:
-            Episode, Reward_MA, Loss_MA, Q_Value_MA, Epsilon
-* part_b_c_2
-    * same file structure as part_b_c_1 (training curves + CSV logs)
-            for a second run/export of experiments
-* exp
-    * experiments_decay.png
-    * experiments_depth.png
-    * experiments_freq.png
-    * experiments_width.png
-            final comparison plots grouped by hyperparameter category
+    generated figures and logs for analysis
+    * part_a
+            * baseline_stats.png: summary plot for Part A (random agent baseline)
+    * part_b_c_1
+            * training_curves_<experiment>.png: per-experiment training curves
+                (reward, loss, epsilon, and mean max Q-value)
+            * training_metrics_<experiment>.csv: per-episode moving-average logs used
+                to generate the training curves. Columns:
+                Episode, Reward_MA, Loss_MA, Q_Value_MA, Epsilon
+    * part_b_c_2
+            * same file structure as part_b_c_1 (training curves + CSV logs)
+                for a second run/export of experiments
+    * exp
+            * experiments_decay.png
+            * experiments_depth.png
+            * experiments_freq.png
+            * experiments_width.png
+                final comparison plots grouped by hyperparameter category
