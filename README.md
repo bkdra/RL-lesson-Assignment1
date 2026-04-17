@@ -46,39 +46,41 @@ Other experiment results and source code can be found on my GitHub: https://gith
 
 
 # Other folders in the GitHub
-    * checkpoints: all saved checkpoints for each experiment. They are organized into different folders named by the hyperparameter changed from the default setting.
-        * base: default hyperparameters
-        * depth2: modifies the default network depth from 3 to 2
-        * depth4: modifies the default network depth from 3 to 4
-        * width64: modifies the default network width (hidden layer dimension) from 128 to 64
-        * width256: modifies the default network width (hidden layer dimension) from 128 to 256
-        * freq5: modifies the default target network update frequency from 10 to 5
-        * freq20: modifies the default target network update frequency from 10 to 20
-        * fastDecay: modifies the default epsilon decay from 0.995 to 0.99
-        * slowDecay: modifies the default epsilon decay from 0.995 to 0.999
-        * episode1200: modifies the default number of training episodes from 600 to 1200
-    
-    * gifs_A: GIF files for Part A
+## checkpoints: 
+    all saved checkpoints for each experiment. They are organized into different folders named by the hyperparameterchanged from the default setting.
+    * base: default hyperparameters
+    * depth2: modifies the default network depth from 3 to 2
+    * depth4: modifies the default network depth from 3 to 4
+    * width64: modifies the default network width (hidden layer dimension) from 128 to 64
+    * width256: modifies the default network width (hidden layer dimension) from 128 to 256
+    * freq5: modifies the default target network update frequency from 10 to 5
+    * freq20: modifies the default target network update frequency from 10 to 20
+    * fastDecay: modifies the default epsilon decay from 0.995 to 0.99
+    * slowDecay: modifies the default epsilon decay from 0.995 to 0.999
+    * episode1200: modifies the default number of training episodes from 600 to 1200
 
-    * gifs_B: GIF files for Part B (using different hyperparameters)
-
-    * models: trained model weights for different hyperparameters. The naming convention is the same as the checkpoint folder names: "lunar_lander_dqn_<modified parameter and its value>.pth"
-
-    * outputs: generated figures and logs for analysis
-        * part_a
-                * baseline_stats.png: summary plot for Part A (random agent baseline)
-        * part_b_c_1
-                * training_curves_<experiment>.png: per-experiment training curves
-                    (reward, loss, epsilon, and mean max Q-value)
-                * training_metrics_<experiment>.csv: per-episode moving-average logs used
-                    to generate the training curves. Columns:
-                    Episode, Reward_MA, Loss_MA, Q_Value_MA, Epsilon
-        * part_b_c_2
-                * same file structure as part_b_c_1 (training curves + CSV logs)
-                    for a second run/export of experiments
-        * exp
-                * experiments_decay.png
-                * experiments_depth.png
-                * experiments_freq.png
-                * experiments_width.png
-                    final comparison plots grouped by hyperparameter category
+## gifs_A
+    GIF files for Part A
+## gifs_B
+    GIF files for Part B (using different hyperparameters)
+## models
+    trained model weights for different hyperparameters. The naming convention is the same as the checkpoint folder names:"lunar_lander_dqn_<modified parameter and its value>.pth"
+## outputs
+    generated figures and logs for analysis
+    * part_a
+            * baseline_stats.png: summary plot for Part A (random agent baseline)
+    * part_b_c_1
+            * training_curves_<experiment>.png: per-experiment training curves
+                (reward, loss, epsilon, and mean max Q-value)
+            * training_metrics_<experiment>.csv: per-episode moving-average logs used
+                to generate the training curves. Columns:
+                Episode, Reward_MA, Loss_MA, Q_Value_MA, Epsilon
+    * part_b_c_2
+            * same file structure as part_b_c_1 (training curves + CSV logs)
+                for a second run/export of experiments
+    * exp
+            * experiments_decay.png
+            * experiments_depth.png
+            * experiments_freq.png
+            * experiments_width.png
+                final comparison plots grouped by hyperparameter category
