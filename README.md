@@ -10,11 +10,11 @@ Other experiment results and source code can be found on my GitHub: https://gith
 
 # What I submitted
 ## Source code:
-    * partA.py: program for Part A (random agent)
-    * partA_recordGIF.py: uses the random agent to record gameplay scenes as GIF files
-    * agent_implement.py: includes the agent implementation (Part B), training and plotting of training results (Part C), and hyperparameter modifications (Part D). It can also evaluate the trained model and record gameplay scenes controlled by the trained model as GIF files.
-    * compare_plot.py: loads CSV files that record moving-average experiment data
-    * utils.py: utility methods for producing result images and GIFs
+* partA.py: program for Part A (random agent)
+* partA_recordGIF.py: uses the random agent to record gameplay scenes as GIF files
+* agent_implement.py: includes the agent implementation (Part B), training and plotting of training results (Part C), and hyperparameter modifications (Part D). It can also evaluate the trained model and record gameplay scenes controlled by the trained model as GIF files.
+* compare_plot.py: loads CSV files that record moving-average experiment data
+* utils.py: utility methods for producing result images and GIFs
 
 
 ## GIFs (.gif):
